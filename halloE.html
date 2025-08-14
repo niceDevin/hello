@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi</title>
+    <style>
+        button {
+            height: 80px;
+            font-size: 50px;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            
+        }
+        button:hover {
+            transform: translateY(+4px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .hi {
+            display: inline-block;
+            color: rgb(0, 128, 32);
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            width: 130px;
+            height: 80px;
+            padding: 0 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .hi:hover {
+            display: inline-block;
+            color: rgb(251, 255, 0);
+            font-size: 45px;
+        }
+        .hi.purple {
+            display: inline-block;
+            color: rgb(128, 0, 128);
+            font-size: 45px;
+        }
+        #hi:active {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        #mz {
+            width: 1000px;
+            height: 80px;
+            font-size: 50px;
+            padding: 0 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #mz:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        #dj {
+            color:gray;
+        }
+        #sleep {
+            color:gray;
+        }
+        .footer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            padding: 10px;
+            color: gray;
+        }
+        .lang-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+        }
+        .lang-btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            background: #f0f0f021;
+            border: 1px solid #ddddddb9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .lang-btn:hover {
+            background: #e0e0e0;
+        }
+        .lang-img {
+            text-align:end;
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+    <script>
+        let timer; // 将timer声明在函数外部，便于所有条件访问
+        
+        window.onload = function() {
+            document.getElementById('zh-cn').style.backgroundColor = 'rgba(0, 145, 255, 0.824)';
+        };
+        // 语言切换功能
+        function switchLanguage(lang) {
+            if (lang === 'en') {
+                document.getElementById('hi').textContent = 'Hello';
+                document.getElementById('dj').textContent = 'Hover over "Hello" to turn yellow';
+                document.getElementById('mz').placeholder = 'Enter 1 to reset, 2 to turn purple, 3 to stop timer';
+                document.getElementById('in-btn').textContent = 'OK';
+                document.getElementById('sleep').textContent = document.getElementById('sleep').textContent.replace('秒后变成默认颜色', ' seconds left to default color');
+                document.querySelector('.footer').textContent = 'This webpage is made by nicedevin github, unauthorized reproduction is prohibited';
+                document.getElementById('mz').style.width='1055px';
+                document.getElementById('us/uk-en').style.backgroundColor='rgba(0, 145, 255, 0.824)';
+                document.getElementById('zh-cn').style.backgroundColor='';
+            } else {
+                document.getElementById('hi').textContent = '你好';
+                document.getElementById('dj').textContent = '碰到"你好"可变成黄色';
+                document.getElementById('mz').placeholder = '输入1恢复默认,输入2变紫色,输入3停止计时';
+                document.getElementById('in-btn').textContent = '好的';
+                document.getElementById('sleep').textContent = document.getElementById('sleep').textContent.replace(' seconds left to default color', '秒后变成默认颜色');
+                document.querySelector('.footer').textContent = '本网页由nicedevin github制作，未经许可，不得转载';
+                document.getElementById('zh-cn').style.backgroundColor='rgba(0, 145, 255, 0.824)';
+                document.getElementById('us/uk-en').style.backgroundColor='';
+
+            }
+        }
+        
+        function mzb(event) {
+            event.preventDefault();
+            var hiElement = document.getElementById('hi');
+            var inputValue = document.getElementById('mz').value;
+            var sleepElement = document.getElementById('sleep');
+
+            if (inputValue == '2') {
+                hiElement.classList.add('purple');
+                alert(hiElement.textContent === '你好' ? '已变成紫色' : 'Turned purple');
+                document.getElementById('mz').value = '';
+                
+                // 检查是否已有倒计时在运行
+                if (sleepElement.dataset.timer) {
+                    clearInterval(timer);
+                }
+                
+                let seconds = 10;
+                sleepElement.textContent = hiElement.textContent === '你好' ? 
+                    `${seconds} 秒后变成默认颜色` : 
+                    `    ${seconds} seconds left to default color`;
+                
+                timer = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        sleepElement.textContent = hiElement.textContent === '你好' ? 
+                            `${seconds} 秒后变成默认颜色` : 
+                            `    ${seconds} seconds left to default color`;
+                    } else {
+                        clearInterval(timer);
+                        alert(hiElement.textContent === '你好' ? "已恢复默认" : "Restored to default");
+                        hiElement.classList.remove('purple');
+                        sleepElement.textContent = "";
+                        delete sleepElement.dataset.timer;
+                    }
+                }, 1000);
+                
+                sleepElement.dataset.timer = "running";
+            }
+            else if (inputValue == '1') {
+                hiElement.classList.remove('purple');
+                alert(hiElement.textContent === '你好' ? '已恢复默认' : 'Restored to default');
+                document.getElementById('mz').value = '';
+                sleepElement.textContent = '';
+                clearInterval(timer);
+                delete sleepElement.dataset.timer;
+            }
+            else if (inputValue == "3") {
+                sleepElement.textContent = '';
+                clearInterval(timer);
+                document.getElementById('mz').value = '';
+                alert(hiElement.textContent === '你好' ? '已停止计时' : 'Timer stopped');
+            }
+            else {
+                alert(hiElement.textContent === '你好' ? '请输入1、2或3' : 'Please enter 1, 2 or 3');
+                document.getElementById('mz').value = '';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="lang-switcher">
+        <img class="lang-img" src="LG.png">
+        <button class="lang-btn" onclick="switchLanguage('zh')" id="zh-cn">中文</button>
+        <button class="lang-btn" onclick="switchLanguage('en')" id="us/uk-en">English</button>
+
+    </div>
+    
+    <h1 class="hi" id="hi">你好</h1>
+    <span id="dj">碰到"你好"可变成黄色</span>
+    <form>
+        <input type="text" placeholder="输入1恢复默认,输入2变紫色,输入3停止计时" id="mz">
+        <button onclick="mzb(event)" id="in-btn">好的</button>
+        <span id="sleep"><br><br></span>
+    </form>
+    <div class="footer">
+        本网页由nicedevin github制作，未经许可，不得转载
+    </div>
+</body>
+</html>

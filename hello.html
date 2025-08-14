@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hi</title>
+    <style>
+        button {
+            height: 80px;
+            font-size: 50px;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(+4px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .hi {
+            display: inline-block;
+            color: rgb(0, 128, 32);
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            width: 130px;
+            height: 80px;
+            padding: 0 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .hi:hover {
+            display: inline-block;
+            color: rgb(251, 255, 0);
+            font-size: 45px;
+        }
+        .hi.purple {
+            display: inline-block;
+            color: rgb(128, 0, 128);
+            font-size: 45px;
+        }
+        #hi:active {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        #mz {
+            width: 1000px;
+            height: 80px;
+            font-size: 50px;
+            padding: 0 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #mz:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        #dj {
+            color:gray;
+        }
+        #sleep {
+            color:gray;
+        }
+        .footer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            padding: 10px;
+            color: gray;
+        }
+    </style>
+    <script>
+        let timer; // 将timer声明在函数外部，便于所有条件访问
+        
+        function mzb(event) {
+            event.preventDefault();
+            var hiElement = document.getElementById('hi');
+            var inputValue = document.getElementById('mz').value;
+            var sleepElement = document.getElementById('sleep');
+
+            if (inputValue == '2') {
+                hiElement.classList.add('purple');
+                alert('已变成紫色');
+                document.getElementById('mz').value = '';
+                
+                // 检查是否已有倒计时在运行
+                if (sleepElement.dataset.timer) {
+                    clearInterval(timer);
+                }
+                
+                let seconds = 10;
+                sleepElement.textContent = `${seconds} 秒后变成默认颜色`;
+                
+                timer = setInterval(() => {
+                    seconds--;
+                    if (seconds > 0) {
+                        sleepElement.textContent = `${seconds} 秒后变成默认颜色`;
+                    } else {
+                        clearInterval(timer);
+                        alert("已恢复默认");
+                        hiElement.classList.remove('purple');
+                        sleepElement.textContent = "";
+                        delete sleepElement.dataset.timer;
+                    }
+                }, 1000);
+                
+                sleepElement.dataset.timer = "running";
+            }
+            else if (inputValue == '1') {
+                hiElement.classList.remove('purple');
+                alert('已恢复默认');
+                document.getElementById('mz').value = '';
+                sleepElement.textContent = '';
+                clearInterval(timer);
+                delete sleepElement.dataset.timer;
+            }
+            else if (inputValue == "3") {
+                sleepElement.textContent = '';
+                clearInterval(timer);
+                document.getElementById('mz').value = '';
+                alert('已停止计时')
+            }
+            else {
+                alert('请输入1或2、3');
+                document.getElementById('mz').value = '';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1 class="hi" id="hi">你好</h1>
+    <span id="dj">碰到'你好'可变成黄色</span>
+    <form>
+        <input type="text" placeholder="输入1恢复默认,输入2变紫色,输入3停止计时" id="mz">
+        <button onclick="mzb(event)">好的</button>
+        <span id="sleep"></span>
+    </form>
+    <div class="footer">
+        本网页由nicedevin github制作，未经许可，不得转载
+    </div>
+</body>
+</html>
